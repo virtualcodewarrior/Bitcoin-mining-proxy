@@ -283,7 +283,7 @@ $request->method = "getwork";
 $request->id = "json";
 
 foreach ($rows as $row) {
-    $response = place_json_call($request, $row['url'], $row['username'], $row['password'], $headers);
+    $response = place_json_call($request, $row['url'], $row['username'], $row['password'], $headers, TRUE);
 
     if (is_object($response) && is_object($response->result)) {
         set_lp_header($headers, $row['id'], $row['url']);

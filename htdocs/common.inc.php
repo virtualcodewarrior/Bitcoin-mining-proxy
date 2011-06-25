@@ -92,7 +92,7 @@ function json_response($object) {
     exit;
 }
 
-function place_json_call($object, $url, $username = '', $password = '', &$headers) {
+function place_json_call($object, $url, $username = '', $password = '', &$headers, $use_preg_replace = FALSE) {
     $authHeader = "";
 
     if (strlen($username) != 0) {
@@ -116,7 +116,11 @@ function place_json_call($object, $url, $username = '', $password = '', &$header
 
     $context = stream_context_create(array('http' => $context_options));
 
-    $result = @json_decode(@file_get_contents($url, false, $context));
+    if ($use_preg_replace) {
+        $result = @json_decode(preg_replace('/(\{[^\}\}]+).*/ism','${1}}}',@file_get_contents($url, false, $context)));
+    } else {
+        $result = @json_decode(@file_get_contents($url, false, $context));
+    }
 
     $headers = $http_response_header;
 
