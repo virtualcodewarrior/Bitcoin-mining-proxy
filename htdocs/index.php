@@ -303,7 +303,7 @@ $tries = 0;
 if(count($rows)) {
   while($tries < $BTC_PROXY['getwork_retries']) {
     foreach ($rows as $row) {
-        $response = place_json_call($request, $row['url'], $row['username'], $row['password'], $headers);
+        $response = place_json_call($request, $row['url'], $row['username'], $row['password'], $headers, 2, TRUE);
     
         if (is_object($response) && is_object($response->result)) {
             set_headers($headers, $row['id'], $row['url']);
