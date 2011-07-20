@@ -31,12 +31,15 @@ $BTC_PROXY = array(
 
     # Dashboard configuration
     'recent_work_num'       => 5,
-    'refresh_interval'      => 60, # seconds
+    'refresh_interval'      => 300, # seconds
     'enable_graphs'         => TRUE
 );
 
-# Where "123" should be where your API key is
-# Where "user" for bitcoinpool is your username
+# "123" should be replaced by your API key.
+# "user" should be replaced by your username.
+#
+# Only maintain entries that work or the graphs
+# will not generate correctly.
 $BALANCE_JSON = array(
         'deepbit' => array(
                 'url' => 'http://deepbit.net/api/123',
