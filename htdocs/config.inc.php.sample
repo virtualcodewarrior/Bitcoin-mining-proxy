@@ -62,6 +62,10 @@ $BALANCE_JSON = array(
             	'url' => 'http://btcmine.com/api/getbalance/123/',
             	'confirmed' => 'confirmed',
             	'unconfirmed' => 'unconfirmed'),
+	'arsbitcoin' => array(
+            	'url' => 'https://arsbitcoin.com/api.php?api_key=123',
+            	'confirmed' => 'confirmed_rewards',
+            	'unconfirmed' => ''),
         'bitcoins-lc' => array(
                 'url' => 'http://localhost/balance/getBitcoinslc.php',
                 'confirmed' => 'balance',
