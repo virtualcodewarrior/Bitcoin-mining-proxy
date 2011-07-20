@@ -505,10 +505,10 @@ function graphBalances() {
          if (unconfirmed[bal])
                 unconfirmed_total += parseFloat(unconfirmed[bal]);
       }
-      balance_total = Math.round(balance_total*1000)/1000;
-      unconfirmed_total = Math.round(unconfirmed_total*1000)/1000;
+      balance_total = Math.round(balance_total*100000000)/100000000;
+      unconfirmed_total = Math.round(unconfirmed_total*100000000)/100000000;
       var total = balance_total + unconfirmed_total;
-      total = Math.round(total*1000)/1000;
+      total = Math.round(total*100000000)/100000000;
       document.getElementById('balance_col_footer')
 	.innerHTML = '<strong>Total:</strong> ' + total;
       var data = new google.visualization.DataTable();
