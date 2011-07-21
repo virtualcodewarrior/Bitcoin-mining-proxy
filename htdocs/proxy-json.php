@@ -7,24 +7,36 @@ header('Content-type: application/json');
 
 global $BALANCE_JSON;
 
-// Website url to open
-$daurl = $BALANCE_JSON[$_REQUEST['pool']]['url'];
+// Set local variables
+$url = $BALANCE_JSON[$_REQUEST['pool']]['url'];
+$exec = $BALANCE_JSON[$_REQUEST['pool']]['exec'];
+$confirmed = $BALANCE_JSON[$_REQUEST['pool']]['confirmed'];
+$unconfirmed = $BALANCE_JSON[$_REQUEST['pool']]['unconfirmed'];
 
-if ($daurl) {
-  // Get that website's content
-  $handle = fopen($daurl, "r");
+// Open URL if available
+if ($url) {
+    // Start curl session and retrieve contents
+    $ch = curl_init();
+    curl_setopt_array($ch, array(CURLOPT_URL => $url,
+                                  CURLOPT_HEADER => 0,
+                                  CURLOPT_RETURNTRANSFER => 1,
+                                  CURLOPT_FOLLOWLOCATION => 1,
+                                  CURLOPT_CONNECTTIMEOUT => 2,
+                                  CURLOPT_TIMEOUT => 4)
+                     );
+    $html = curl_exec($ch);
+    curl_close($ch);
 
-  // If there is something, read and return
-  if ($handle) {
-      while (!feof($handle)) {
-        $buffer = fgets($handle, 64);
-          echo $buffer;
-      }
-      fclose($handle);
-  }
+    if ($html) {
+        echo $html;
+    } else {
+        echo "{\"$confirmed\":\"0\",\"$unconfirmed\":\"0\"}";
+    }
+// Else open command if available
+} elseif ($exec) {
+    echo exec($exec);
+// Else return nothing
 } else {
-  $execstat = $BALANCE_JSON[$_REQUEST['pool']]['exec'];
-  echo exec($execstat);
+    echo "{\"$confirmed\":\"0\",\"$unconfirmed\":\"0\"}";
 }
-
 ?>
