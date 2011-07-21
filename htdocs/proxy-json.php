@@ -22,6 +22,7 @@ if ($url) {
                                   CURLOPT_RETURNTRANSFER => 1,
                                   CURLOPT_FOLLOWLOCATION => 1,
                                   CURLOPT_SSL_VERIFYPEER => 0,
+                                  CURLOPT_SSL_VERIFYHOST => 2,
                                   CURLOPT_CONNECTTIMEOUT => 2,
                                   CURLOPT_TIMEOUT => 4)
                      );
