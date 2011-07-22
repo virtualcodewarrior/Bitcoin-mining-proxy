@@ -223,7 +223,7 @@ class AdminDashboardView
         ?> MHash/s</td>
     </tr>
 </table>
-<div id="workerstatus-chart" align="center"></div>
+<div id="workerstatus-chart" class="centered"></div>
 </div>
 
 <br />
@@ -349,20 +349,22 @@ class AdminDashboardView
 </div>
 
 <br/>
-<div class="poolcharts" align="center">
+<div id="poolcharts" class="centered">
 <table>
 <tr style="border: 0;">
    <td><div id="poolchart_div"></div></td>
-   <td><div id="poolchart_balance_col"></div><div id="balance_col_footer" align="center"></div></td>
+   <td><div id="poolchart_balance_col"></div><div id="balance_col_footer" class="centered"></div></td>
 </tr>
 </table>
 </div>
 
 <div id="interval_config">
     <h2>Interval Override</h2>
-    <form action="" method="GET">
-        Interval(seconds):<input type="text" name="interval" size="4"/>
+    <form action="" method="get">
+        <p>Interval(seconds): <input type="text" name="interval" size="4"/></p>
     </form>
+</div>
+
 </div>
 
 <?php
@@ -495,9 +497,7 @@ function getBalances(balance) {
 
 <?php if ($BTC_PROXY['enable_graphs']) { ?>
 function graphBalances() {
-   console.log("graphBalances() " + Object.size(balance));
    function drawBalanceGraphCol() {
-      if (!(balance && Object.size(balance) > 0)) { console.log("return"); return; }
       var balance_total = 0;
       var unconfirmed_total = 0;
       for (var bal in balance) {
@@ -510,7 +510,7 @@ function graphBalances() {
       var total = balance_total + unconfirmed_total;
       total = Math.round(total*100000000)/100000000;
       document.getElementById('balance_col_footer')
-	.innerHTML = '<strong>Total:</strong> ' + total;
+	.innerHTML = 'Total: ' + total;
       var data = new google.visualization.DataTable();
       data.addColumn('string', 'Pool');
       data.addColumn('number', 'Confirmed ('+balance_total+')');

@@ -101,8 +101,14 @@ table.data tr.datatotals td {
 }
 
 .centered {
+    text-align: center;
+}
+
+.centered table,
+table.centered {
     margin-left: auto;
     margin-right: auto;
+    text-align: left;
 }
 
 #dashboard {
