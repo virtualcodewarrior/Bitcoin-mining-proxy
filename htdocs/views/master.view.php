@@ -119,6 +119,9 @@ abstract class MasterView
         <script type="text/javascript">
             google.load('visualization', '1', {packages: ['corechart']});
         </script>
+<?php if ($title == "Dashboard" && $BTC_PROXY['refresh_interval'] > 0) { ?>
+        <meta http-equiv="refresh" content="<?php echo $BTC_PROXY['refresh_interval']?>" />
+<?php } ?>
     </head>
     <body>
         <h1><?php echo_html($title) ?></h1>
