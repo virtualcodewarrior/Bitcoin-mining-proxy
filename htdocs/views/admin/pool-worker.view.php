@@ -92,6 +92,18 @@ class AdminPoolWorkerView
         <?php } ?>
     </tr>
     <?php } ?>
+    <tr>
+        <form action="<?php echo_html(make_url('/admin/pool-worker.php')) ?>" method="post">
+            <fieldset>
+                <input type="hidden" name="pool_id" value="<?php echo_html($this->viewdata['pool-id']) ?>" />
+                <td><?php $this->renderButton('setGlobalValues', 'Update Globally'); ?></td>
+                <td><input type="text" name="priority" value="" /></td>
+                <td></td>
+                <td><input type="text" name="username" value="" /></td>
+                <td><input type="text" name="password" value="" /></td>
+            </fieldset>
+        </form>
+    </tr>
 </table>
 
 </div>

@@ -117,6 +117,42 @@ class AdminPoolWorkerController extends AdminController
         return new RedirectView("/admin/pool-worker.php?id=$pool_id");
     }
 
+    public function setGlobalValuesPostView($request)
+    {
+        $pool_id = (int)$request['pool_id'];
+        $priority = ($request['priority']) ? $request['priority'] : NULL;
+        $username = ($request['username']) ? $request['username'] : NULL;
+        $password = ($request['password']) ? $request['password'] : NULL;
+
+        if ($pool_id == 0) {
+            return new RedirectView('/admin/pool.php');
+        }
+
+        $pdo = db_connect();
+
+        $q = $pdo->prepare('
+            UPDATE worker_pool
+
+               SET priority = COALESCE(:priority,priority),
+                   pool_username = COALESCE(:username,pool_username),
+                   pool_password = COALESCE(:password,pool_password)
+
+             WHERE pool_id = :pool_id
+        ');
+        $q->execute(array(
+            ':priority'     => $priority,
+            ':username'     => $username,
+            ':password'     => $password,
+            ':pool_id'      => $pool_id
+        ));
+        if (!$q->rowCount()) {
+            $_SESSION['tempdata']['errors'][] =
+                sprintf('Worker not found or not affected.');
+        }
+
+        return new RedirectView("/admin/pool-worker.php?id=$pool_id");
+    }
+
     public function editGetView(PoolWorkerModel $model)
     {
         if ($model->pool_id == 0) {
