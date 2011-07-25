@@ -71,6 +71,12 @@ class AdminPoolsView
         </td>
         <td><?php echo_html($pool->url) ?></td>
         <td>
+            <form action="<?php echo_html(make_url('/admin/pool-worker.php')) ?>">
+                <fieldset>
+                    <input type="hidden" name="id" value="<?php echo_html($pool->id) ?>" />
+                    <?php $this->renderImageButton('index', 'manage-workers', 'Manage workers') ?>
+                </fieldset>
+            </form>
             <form action="<?php echo_html(make_url('/admin/pool.php')) ?>" method="get">
                 <fieldset>
                     <input type="hidden" name="id" value="<?php echo_html($pool->id) ?>" />

@@ -381,6 +381,10 @@ fieldset {
     background-image: url('icons/server_go.png');
 }
 
+.image-button-manage-workers {
+    background-image: url('icons/cog_edit.png');
+}
+
 .image-button-edit-pool {
     background-image: url('icons/server_edit.png');
 }

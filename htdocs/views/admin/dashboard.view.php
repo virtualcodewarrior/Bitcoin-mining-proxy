@@ -119,7 +119,13 @@ class AdminDashboardView
             <form action="<?php echo_html(make_url('/admin/worker-pool.php')) ?>">
                 <fieldset>
                     <input type="hidden" name="id" value="<?php echo_html($row['worker_id']) ?>" />
-                    <?php $this->renderImageButton('index', 'manage-pools', 'Manage worker-pool') ?>
+                    <?php $this->renderImageButton('index', 'manage-pools', 'Manage pools') ?>
+                </fieldset>
+            </form>
+            <form action="<?php echo_html(make_url('/admin/workers.php')) ?>" method="get">
+                <fieldset>
+                    <input type="hidden" name="id" value="<?php echo_html($row['worker_id']) ?>" />
+                    <?php $this->renderImageButton('edit', 'edit-worker', 'Edit worker') ?>
                 </fieldset>
             </form>
             <?php echo htmlspecialchars($row['worker']) ?>
@@ -251,6 +257,12 @@ class AdminDashboardView
     <tr>
     <?php } ?>
         <td>
+            <form action="<?php echo_html(make_url('/admin/pool-worker.php')) ?>">
+                <fieldset>
+                    <input type="hidden" name="id" value="<?php echo_html($row['pool_id']) ?>" />
+                    <?php $this->renderImageButton('index', 'manage-workers', 'Manage workers') ?>
+                </fieldset>
+            </form>
             <form action="<?php echo_html(make_url('/admin/pool.php')) ?>">
                 <fieldset>
                     <input type="hidden" name="id" value="<?php echo_html($row['pool_id']) ?>" />
