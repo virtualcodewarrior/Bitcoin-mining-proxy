@@ -226,58 +226,58 @@ class AdminWorkersController extends AdminController
         $viewdata['worker'] = $q->fetch(PDO::FETCH_ASSOC);
 
         $viewdata['WorkerStatsByHour'] = db_query($pdo, '
-            SELECT CONCAT(HOUR(@now:=DATE_SUB(@now,INTERVAL 1 HOUR)),":00") as hour,
+            SELECT CONCAT(HOUR(@utc_timestamp:=DATE_SUB(@utc_timestamp,INTERVAL 1 HOUR)),":00") as hour,
                    (SELECT count(*)
                       FROM work_data
-                     WHERE HOUR(time_requested) = HOUR(@now)
-                       AND DATE(time_requested) = DATE(@now)
+                     WHERE HOUR(time_requested) = HOUR(@utc_timestamp)
+                       AND DATE(time_requested) = DATE(@utc_timestamp)
                        AND worker_id = :worker_id) as getworks,
                    (SELECT count(result)
                       FROM submitted_work
-                     WHERE HOUR(time) = HOUR(@now)
-                       AND DATE(time) = DATE(@now)
+                     WHERE HOUR(time) = HOUR(@utc_timestamp)
+                       AND DATE(time) = DATE(@utc_timestamp)
                        AND result = 1
                        AND worker_id = :worker_id) as shares,
                    (SELECT count(result)
                       FROM submitted_work
-                     WHERE HOUR(time) = HOUR(@now)
-                       AND DATE(time) = DATE(@now)
+                     WHERE HOUR(time) = HOUR(@utc_timestamp)
+                       AND DATE(time) = DATE(@utc_timestamp)
                        AND result = 0
                        AND worker_id = :worker_id) as rejected,
                    (SELECT (shares + rejected) * 4294967296 / 3600 / 1000000) as mhash
 
-              FROM submitted_work, (SELECT @now:=now()) t
+              FROM submitted_work, (SELECT @utc_timestamp:=UTC_TIMESTAMP()) t
 
-             WHERE @now > DATE_SUB(now(), INTERVAL 24 HOUR)
+             WHERE @utc_timestamp > DATE_SUB(UTC_TIMESTAMP(), INTERVAL 24 HOUR)
 
-             ORDER BY @now;
+             ORDER BY @utc_timestamp;
         ', array(
             ':worker_id' => $id
         ));
 
         $viewdata['WorkerStatsByDay'] = db_query($pdo, '
-            SELECT CONCAT(MONTH(@now),"-",DAY(@now:=DATE_SUB(@now,INTERVAL 1 DAY))) as day,
+            SELECT CONCAT(MONTH(@utc_timestamp),"-",DAY(@utc_timestamp:=DATE_SUB(@utc_timestamp,INTERVAL 1 DAY))) as day,
                    (SELECT count(*)
                       FROM work_data
-                     WHERE DATE(time_requested) = DATE(@now)
+                     WHERE DATE(time_requested) = DATE(@utc_timestamp)
                        AND worker_id = :worker_id) as getworks,
                    (SELECT count(result)
                       FROM submitted_work
-                     WHERE DATE(time) = DATE(@now)
+                     WHERE DATE(time) = DATE(@utc_timestamp)
                        AND result = 1
                        AND worker_id = :worker_id) as shares,
                    (SELECT count(result)
                       FROM submitted_work
-                     WHERE DATE(time) = DATE(@now)
+                     WHERE DATE(time) = DATE(@utc_timestamp)
                        AND result = 0
                        AND worker_id = :worker_id) as rejected,
                     (SELECT (shares + rejected) * 4294967296 / 86400 / 1000000) as mhash
 
-              FROM submitted_work, (SELECT @now:=now()) t
+              FROM submitted_work, (SELECT @utc_timestamp:=UTC_TIMESTAMP()) t
 
-             WHERE @now > DATE_SUB(now(), INTERVAL 1 MONTH)
+             WHERE @utc_timestamp > DATE_SUB(UTC_TIMESTAMP(), INTERVAL 1 MONTH)
 
-             ORDER BY @now;
+             ORDER BY @utc_timestamp;
         ', array(
             ':worker_id' => $id
         ));
