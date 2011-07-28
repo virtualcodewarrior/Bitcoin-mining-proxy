@@ -180,7 +180,7 @@ class AdminWorkerStatsView
     protected function renderBody()
     {
         $WorkerStatsByHourCount = count($this->viewdata['WorkerStatsByHour']);
-        $WorkerStatsByDayCount = count($this->viewdata['WorkerStatsByDay']);
+        $WorkerStatsByDateCount = count($this->viewdata['WorkerStatsByDate']);
 ?>
 
 <div id="worker-stats">
@@ -195,7 +195,8 @@ class AdminWorkerStatsView
         <?php
         $idx = 0;
         foreach ($this->viewdata['WorkerStatsByHour'] as $row) {
-            echo "data.setValue({$idx}, 0, '{$row['hour']}'); ";
+            $hour = date('H:i',strtotime(format_date($row['hour'])));
+            echo "data.setValue({$idx}, 0, '{$hour}'); ";
             echo "data.setValue({$idx}, 1, {$row['mhash']}); ";
             echo "\n";
             $idx++;
@@ -209,23 +210,24 @@ class AdminWorkerStatsView
                           title: 'MHash Average - Last 24 Hours'});
     }
 
-    google.setOnLoadCallback(drawChartWorkerMHashByDay);
-    function drawChartWorkerMHashByDay() {
+    google.setOnLoadCallback(drawChartWorkerMHashByDate);
+    function drawChartWorkerMHashByDate() {
         var data = new google.visualization.DataTable();
-        data.addColumn('string', 'Day');
+        data.addColumn('string', 'Date');
         data.addColumn('number', 'MHash');
-        data.addRows(<?php echo $WorkerStatsByDayCount ?>);
+        data.addRows(<?php echo $WorkerStatsByDateCount ?>);
         <?php
         $idx = 0;
-        foreach ($this->viewdata['WorkerStatsByDay'] as $row) {
-            echo "data.setValue({$idx}, 0, '{$row['day']}'); ";
+        foreach ($this->viewdata['WorkerStatsByDate'] as $row) {
+            $date = date('m-d',strtotime(format_date($row['date'])));
+            echo "data.setValue({$idx}, 0, '{$date}'); ";
             echo "data.setValue({$idx}, 1, {$row['mhash']}); ";
             echo "\n";
             $idx++;
         }
         ?>
 
-        var chart = new google.visualization.LineChart(document.getElementById('workermhashbydaychart_div'));
+        var chart = new google.visualization.LineChart(document.getElementById('workermhashbydatechart_div'));
         chart.draw(data, {width: 500, height: 200,
                           colors: ['Orange'],
                           legend: 'none',
@@ -242,7 +244,8 @@ class AdminWorkerStatsView
         <?php
         $idx = 0;
         foreach ($this->viewdata['WorkerStatsByHour'] as $row) {
-            echo "data.setValue({$idx}, 0, '{$row['hour']}'); ";
+            $hour = date('H:i',strtotime(format_date($row['hour'])));
+            echo "data.setValue({$idx}, 0, '{$hour}'); ";
             echo "data.setValue({$idx}, 1, {$row['shares']}); ";
             echo "data.setValue({$idx}, 2, {$row['rejected']}); ";
             echo "\n";
@@ -257,17 +260,18 @@ class AdminWorkerStatsView
                           title: 'Shares - Last 24 Hours'});
     }
 
-    google.setOnLoadCallback(drawChartWorkerSharesByDay);
-    function drawChartWorkerSharesByDay() {
+    google.setOnLoadCallback(drawChartWorkerSharesByDate);
+    function drawChartWorkerSharesByDate() {
         var data = new google.visualization.DataTable();
-        data.addColumn('string', 'Day');
+        data.addColumn('string', 'Date');
         data.addColumn('number', 'Valid');
         data.addColumn('number', 'Rejected');
-        data.addRows(<?php echo $WorkerStatsByDayCount ?>);
+        data.addRows(<?php echo $WorkerStatsByDateCount ?>);
         <?php
         $idx = 0;
-        foreach ($this->viewdata['WorkerStatsByDay'] as $row) {
-            echo "data.setValue({$idx}, 0, '{$row['day']}'); ";
+        foreach ($this->viewdata['WorkerStatsByDate'] as $row) {
+            $date = date('m-d',strtotime(format_date($row['date'])));
+            echo "data.setValue({$idx}, 0, '{$date}'); ";
             echo "data.setValue({$idx}, 1, {$row['shares']}); ";
             echo "data.setValue({$idx}, 2, {$row['rejected']}); ";
             echo "\n";
@@ -275,7 +279,7 @@ class AdminWorkerStatsView
         }
         ?>
 
-        var chart = new google.visualization.LineChart(document.getElementById('workersharesbydaychart_div'));
+        var chart = new google.visualization.LineChart(document.getElementById('workersharesbydatechart_div'));
         chart.draw(data, {width: 500, height: 200,
                           colors: ['Green', 'Red'],
                           legend: 'none',
@@ -291,7 +295,8 @@ class AdminWorkerStatsView
         <?php
         $idx = 0;
         foreach ($this->viewdata['WorkerStatsByHour'] as $row) {
-            echo "data.setValue({$idx}, 0, '{$row['hour']}'); ";
+            $hour = date('H:i',strtotime(format_date($row['hour'])));
+            echo "data.setValue({$idx}, 0, '{$hour}'); ";
             echo "data.setValue({$idx}, 1, {$row['getworks']}); ";
             echo "\n";
             $idx++;
@@ -305,23 +310,24 @@ class AdminWorkerStatsView
                           title: 'Getworks - Last 24 Hours'});
     }
 
-    google.setOnLoadCallback(drawChartWorkerGetworksByDay);
-    function drawChartWorkerGetworksByDay() {
+    google.setOnLoadCallback(drawChartWorkerGetworksByDate);
+    function drawChartWorkerGetworksByDate() {
         var data = new google.visualization.DataTable();
-        data.addColumn('string', 'Day');
+        data.addColumn('string', 'Date');
         data.addColumn('number', 'Getworks');
-        data.addRows(<?php echo $WorkerStatsByDayCount ?>);
+        data.addRows(<?php echo $WorkerStatsByDateCount ?>);
         <?php
         $idx = 0;
-        foreach ($this->viewdata['WorkerStatsByDay'] as $row) {
-            echo "data.setValue({$idx}, 0, '{$row['day']}'); ";
+        foreach ($this->viewdata['WorkerStatsByDate'] as $row) {
+            $date = date('m-d',strtotime(format_date($row['date'])));
+            echo "data.setValue({$idx}, 0, '{$date}'); ";
             echo "data.setValue({$idx}, 1, {$row['getworks']}); ";
             echo "\n";
             $idx++;
         }
         ?>
 
-        var chart = new google.visualization.LineChart(document.getElementById('workergetworksbydaychart_div'));
+        var chart = new google.visualization.LineChart(document.getElementById('workergetworksbydatechart_div'));
         chart.draw(data, {width: 500, height: 200,
                           colors: ['Blue'],
                           legend: 'none',
@@ -332,15 +338,15 @@ class AdminWorkerStatsView
 <table class="centered">
     <tr>
         <td><div id="workermhashbyhourchart_div"></div></td>
-        <td><div id="workermhashbydaychart_div"></div></td>
+        <td><div id="workermhashbydatechart_div"></div></td>
     </tr>
     <tr>
         <td><div id="workersharesbyhourchart_div"></div></td>
-        <td><div id="workersharesbydaychart_div"></div></td>
+        <td><div id="workersharesbydatechart_div"></div></td>
     </tr>
     <tr>
         <td><div id="workergetworksbyhourchart_div"></div></td>
-        <td><div id="workergetworksbydaychart_div"></div></td>
+        <td><div id="workergetworksbydatechart_div"></div></td>
     </tr>
 </table>
 

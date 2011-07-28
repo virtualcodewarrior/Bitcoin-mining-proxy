@@ -255,8 +255,8 @@ class AdminWorkersController extends AdminController
             ':worker_id' => $id
         ));
 
-        $viewdata['WorkerStatsByDay'] = db_query($pdo, '
-            SELECT CONCAT(MONTH(@utc_timestamp),"-",DAY(@utc_timestamp:=DATE_SUB(@utc_timestamp,INTERVAL 1 DAY))) as day,
+        $viewdata['WorkerStatsByDate'] = db_query($pdo, '
+            SELECT DATE(@utc_timestamp:=DATE_SUB(@utc_timestamp,INTERVAL 1 DAY)) as date,
                    (SELECT count(*)
                       FROM work_data
                      WHERE DATE(time_requested) = DATE(@utc_timestamp)
