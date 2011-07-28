@@ -409,3 +409,6 @@ fieldset {
     background-image: url('icons/cog_add.png');
 }
 
+.image-button-worker-stats {
+    background-image: url('icons/chart_pie.png');
+}

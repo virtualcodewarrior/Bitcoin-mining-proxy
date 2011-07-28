@@ -68,6 +68,12 @@ class AdminWorkersView
                     <?php $this->renderImageButton('edit', 'edit-worker', 'Edit worker') ?>
                 </fieldset>
             </form>
+            <form action="<?php echo_html(make_url('/admin/workers.php')) ?>" method="get">
+                <fieldset>
+                    <input type="hidden" name="id" value="<?php echo_html($row['id']) ?>" />
+                    <?php $this->renderImageButton('stats', 'worker-stats', 'Worker stats') ?>
+                </fieldset>
+            </form>
         <?php
             if ($row['pools'] == 0) {
 ?>
@@ -105,7 +111,8 @@ class AdminWorkerNewEditView
 {
     protected function getTitle()
     {
-        return $this->viewdata['worker']->id ? 'Edit worker' : 'New worker';
+        $worker = $this->viewdata['worker']->name;
+        return $this->viewdata['worker']->id ? "Edit worker - $worker" : "New worker";
     }
 
     protected function getDivId()
@@ -161,4 +168,185 @@ class AdminWorkerNewEditView
     }
 }
 
+class AdminWorkerStatsView
+    extends WorkersView
+{
+    protected function getTitle()
+    {
+        $worker = $this->viewdata['worker']['name'];
+        return "Worker Stats - $worker";
+    }
+
+    protected function renderBody()
+    {
+        $WorkerStatsByHourCount = count($this->viewdata['WorkerStatsByHour']);
+        $WorkerStatsByDayCount = count($this->viewdata['WorkerStatsByDay']);
+?>
+
+<div id="worker-stats">
+
+<script type="text/javascript">
+    google.setOnLoadCallback(drawChartWorkerMHashByHour);
+    function drawChartWorkerMHashByHour() {
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Hour');
+        data.addColumn('number', 'MHash');
+        data.addRows(<?php echo $WorkerStatsByHourCount ?>);
+        <?php
+        $idx = 0;
+        foreach ($this->viewdata['WorkerStatsByHour'] as $row) {
+            echo "data.setValue({$idx}, 0, '{$row['hour']}'); ";
+            echo "data.setValue({$idx}, 1, {$row['mhash']}); ";
+            echo "\n";
+            $idx++;
+        }
+        ?>
+
+        var chart = new google.visualization.LineChart(document.getElementById('workermhashbyhourchart_div'));
+        chart.draw(data, {width: 500, height: 200,
+                          colors: ['Orange'],
+                          legend: 'none',
+                          title: 'MHash Average - Last 24 Hours'});
+    }
+
+    google.setOnLoadCallback(drawChartWorkerMHashByDay);
+    function drawChartWorkerMHashByDay() {
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Day');
+        data.addColumn('number', 'MHash');
+        data.addRows(<?php echo $WorkerStatsByDayCount ?>);
+        <?php
+        $idx = 0;
+        foreach ($this->viewdata['WorkerStatsByDay'] as $row) {
+            echo "data.setValue({$idx}, 0, '{$row['day']}'); ";
+            echo "data.setValue({$idx}, 1, {$row['mhash']}); ";
+            echo "\n";
+            $idx++;
+        }
+        ?>
+
+        var chart = new google.visualization.LineChart(document.getElementById('workermhashbydaychart_div'));
+        chart.draw(data, {width: 500, height: 200,
+                          colors: ['Orange'],
+                          legend: 'none',
+                          title: 'MHash Average - Last Month'});
+    }
+
+    google.setOnLoadCallback(drawChartWorkerSharesByHour);
+    function drawChartWorkerSharesByHour() {
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Hour');
+        data.addColumn('number', 'Valid');
+        data.addColumn('number', 'Rejected');
+        data.addRows(<?php echo $WorkerStatsByHourCount ?>);
+        <?php
+        $idx = 0;
+        foreach ($this->viewdata['WorkerStatsByHour'] as $row) {
+            echo "data.setValue({$idx}, 0, '{$row['hour']}'); ";
+            echo "data.setValue({$idx}, 1, {$row['shares']}); ";
+            echo "data.setValue({$idx}, 2, {$row['rejected']}); ";
+            echo "\n";
+            $idx++;
+        }
+        ?>
+
+        var chart = new google.visualization.LineChart(document.getElementById('workersharesbyhourchart_div'));
+        chart.draw(data, {width: 500, height: 200,
+                          colors: ['Green', 'Red'],
+                          legend: 'none',
+                          title: 'Shares - Last 24 Hours'});
+    }
+
+    google.setOnLoadCallback(drawChartWorkerSharesByDay);
+    function drawChartWorkerSharesByDay() {
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Day');
+        data.addColumn('number', 'Valid');
+        data.addColumn('number', 'Rejected');
+        data.addRows(<?php echo $WorkerStatsByDayCount ?>);
+        <?php
+        $idx = 0;
+        foreach ($this->viewdata['WorkerStatsByDay'] as $row) {
+            echo "data.setValue({$idx}, 0, '{$row['day']}'); ";
+            echo "data.setValue({$idx}, 1, {$row['shares']}); ";
+            echo "data.setValue({$idx}, 2, {$row['rejected']}); ";
+            echo "\n";
+            $idx++;
+        }
+        ?>
+
+        var chart = new google.visualization.LineChart(document.getElementById('workersharesbydaychart_div'));
+        chart.draw(data, {width: 500, height: 200,
+                          colors: ['Green', 'Red'],
+                          legend: 'none',
+                          title: 'Shares - Last Month'});
+    }
+
+    google.setOnLoadCallback(drawChartWorkerGetworksByHour);
+    function drawChartWorkerGetworksByHour() {
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Hour');
+        data.addColumn('number', 'Getworks');
+        data.addRows(<?php echo $WorkerStatsByHourCount ?>);
+        <?php
+        $idx = 0;
+        foreach ($this->viewdata['WorkerStatsByHour'] as $row) {
+            echo "data.setValue({$idx}, 0, '{$row['hour']}'); ";
+            echo "data.setValue({$idx}, 1, {$row['getworks']}); ";
+            echo "\n";
+            $idx++;
+        }
+        ?>
+
+        var chart = new google.visualization.LineChart(document.getElementById('workergetworksbyhourchart_div'));
+        chart.draw(data, {width: 500, height: 200,
+                          colors: ['Blue'],
+                          legend: 'none',
+                          title: 'Getworks - Last 24 Hours'});
+    }
+
+    google.setOnLoadCallback(drawChartWorkerGetworksByDay);
+    function drawChartWorkerGetworksByDay() {
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Day');
+        data.addColumn('number', 'Getworks');
+        data.addRows(<?php echo $WorkerStatsByDayCount ?>);
+        <?php
+        $idx = 0;
+        foreach ($this->viewdata['WorkerStatsByDay'] as $row) {
+            echo "data.setValue({$idx}, 0, '{$row['day']}'); ";
+            echo "data.setValue({$idx}, 1, {$row['getworks']}); ";
+            echo "\n";
+            $idx++;
+        }
+        ?>
+
+        var chart = new google.visualization.LineChart(document.getElementById('workergetworksbydaychart_div'));
+        chart.draw(data, {width: 500, height: 200,
+                          colors: ['Blue'],
+                          legend: 'none',
+                          title: 'Getworks - Last Month'});
+    }
+</script>
+
+<table class="centered">
+    <tr>
+        <td><div id="workermhashbyhourchart_div"></div></td>
+        <td><div id="workermhashbydaychart_div"></div></td>
+    </tr>
+    <tr>
+        <td><div id="workersharesbyhourchart_div"></div></td>
+        <td><div id="workersharesbydaychart_div"></div></td>
+    </tr>
+    <tr>
+        <td><div id="workergetworksbyhourchart_div"></div></td>
+        <td><div id="workergetworksbydaychart_div"></div></td>
+    </tr>
+</table>
+
+</div>
+
+<?php
+    }
+}
 ?>

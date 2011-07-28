@@ -102,6 +102,7 @@ class AdminDashboardView
         <th>Shares<sup>*</sup></th>
         <th>Rejected<sup>*</sup></th>
         <th>Hashing speed<sup>*</sup></th>
+        <th>Actions</th>
     </tr>
     <?php 
     $workerstatus_count = 0;
@@ -116,18 +117,6 @@ class AdminDashboardView
     <tr>
     <?php } ?>
         <td>
-            <form action="<?php echo_html(make_url('/admin/worker-pool.php')) ?>">
-                <fieldset>
-                    <input type="hidden" name="id" value="<?php echo_html($row['worker_id']) ?>" />
-                    <?php $this->renderImageButton('index', 'manage-pools', 'Manage pools') ?>
-                </fieldset>
-            </form>
-            <form action="<?php echo_html(make_url('/admin/workers.php')) ?>" method="get">
-                <fieldset>
-                    <input type="hidden" name="id" value="<?php echo_html($row['worker_id']) ?>" />
-                    <?php $this->renderImageButton('edit', 'edit-worker', 'Edit worker') ?>
-                </fieldset>
-            </form>
             <?php echo htmlspecialchars($row['worker']) ?>
         </td>
         <td><?php
@@ -184,6 +173,26 @@ class AdminDashboardView
                 echo "0";
             }
         ?> MHash/s</td>
+        <td>
+            <form action="<?php echo_html(make_url('/admin/worker-pool.php')) ?>">
+                <fieldset>
+                    <input type="hidden" name="id" value="<?php echo_html($row['worker_id']) ?>" />
+                    <?php $this->renderImageButton('index', 'manage-pools', 'Manage pools') ?>
+                </fieldset>
+            </form>
+            <form action="<?php echo_html(make_url('/admin/workers.php')) ?>" method="get">
+                <fieldset>
+                    <input type="hidden" name="id" value="<?php echo_html($row['worker_id']) ?>" />
+                    <?php $this->renderImageButton('edit', 'edit-worker', 'Edit worker') ?>
+                </fieldset>
+            </form>
+            <form action="<?php echo_html(make_url('/admin/workers.php')) ?>" method="get">
+                <fieldset>
+                    <input type="hidden" name="id" value="<?php echo_html($row['worker_id']) ?>" />
+                    <?php $this->renderImageButton('stats', 'worker-stats', 'Worker Stats') ?>
+                </fieldset>
+            </form>
+        </td>
     </tr>
     <?php
         //build cumulative counts so we don't have to reload the data
@@ -227,6 +236,7 @@ class AdminDashboardView
                 echo "0";
             }
         ?> MHash/s</td>
+        <td>&nbsp;</td>
     </tr>
 </table>
 <div id="workerstatus-chart" class="centered"></div>
@@ -245,6 +255,7 @@ class AdminDashboardView
         <th>Getworks<sup>*</sup></th>
         <th>Shares<sup>*</sup></th>
         <th>Rejected<sup>*</sup></th>
+        <th>Actions</th>
     </tr>
     <?php 
     $poolstatus_count = 0;
@@ -257,18 +268,6 @@ class AdminDashboardView
     <tr>
     <?php } ?>
         <td>
-            <form action="<?php echo_html(make_url('/admin/pool-worker.php')) ?>">
-                <fieldset>
-                    <input type="hidden" name="id" value="<?php echo_html($row['pool_id']) ?>" />
-                    <?php $this->renderImageButton('index', 'manage-workers', 'Manage workers') ?>
-                </fieldset>
-            </form>
-            <form action="<?php echo_html(make_url('/admin/pool.php')) ?>">
-                <fieldset>
-                    <input type="hidden" name="id" value="<?php echo_html($row['pool_id']) ?>" />
-                    <?php $this->renderImageButton('edit', 'edit-pool', 'Edit pool') ?>
-                </fieldset>
-            </form>
             <?php echo htmlspecialchars($row['pool']) ?>
         </td>
         <td><?php
@@ -314,6 +313,20 @@ class AdminDashboardView
             }
             echo ")";
         ?></td>
+        <td>
+            <form action="<?php echo_html(make_url('/admin/pool-worker.php')) ?>">
+                <fieldset>
+                    <input type="hidden" name="id" value="<?php echo_html($row['pool_id']) ?>" />
+                    <?php $this->renderImageButton('index', 'manage-workers', 'Manage workers') ?>
+                </fieldset>
+            </form>
+            <form action="<?php echo_html(make_url('/admin/pool.php')) ?>">
+                <fieldset>
+                    <input type="hidden" name="id" value="<?php echo_html($row['pool_id']) ?>" />
+                    <?php $this->renderImageButton('edit', 'edit-pool', 'Edit pool') ?>
+                </fieldset>
+            </form>
+        </td>
     </tr>
     <?php
         //build cumulative counts so we don't have to reload the data
@@ -356,6 +369,7 @@ class AdminDashboardView
             }
             echo ")";
         ?></td>
+        <td>&nbsp;</td>
     </tr>
 </table>
 </div>

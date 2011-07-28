@@ -208,6 +208,82 @@ class AdminWorkersController extends AdminController
     {
         return $this->newPostView($worker);
     }
+
+    public function statsGetView($request)
+    {
+        $id = (int)$request['id'];
+
+        if ($id == 0) {
+            return new RedirectView('/admin/workers.php');
+        }
+
+        $viewdata = array();
+
+        $pdo = db_connect();
+
+        $q = $pdo->prepare('SELECT name FROM worker WHERE id = :worker_id');
+        $q->execute(array(':worker_id' => $id));
+        $viewdata['worker'] = $q->fetch(PDO::FETCH_ASSOC);
+
+        $viewdata['WorkerStatsByHour'] = db_query($pdo, '
+            SELECT CONCAT(HOUR(@now:=DATE_SUB(@now,INTERVAL 1 HOUR)),":00") as hour,
+                   (SELECT count(*)
+                      FROM work_data
+                     WHERE HOUR(time_requested) = HOUR(@now)
+                       AND DATE(time_requested) = DATE(@now)
+                       AND worker_id = :worker_id) as getworks,
+                   (SELECT count(result)
+                      FROM submitted_work
+                     WHERE HOUR(time) = HOUR(@now)
+                       AND DATE(time) = DATE(@now)
+                       AND result = 1
+                       AND worker_id = :worker_id) as shares,
+                   (SELECT count(result)
+                      FROM submitted_work
+                     WHERE HOUR(time) = HOUR(@now)
+                       AND DATE(time) = DATE(@now)
+                       AND result = 0
+                       AND worker_id = :worker_id) as rejected,
+                   (SELECT (shares + rejected) * 4294967296 / 3600 / 1000000) as mhash
+
+              FROM submitted_work, (SELECT @now:=now()) t
+
+             WHERE @now > DATE_SUB(now(), INTERVAL 24 HOUR)
+
+             ORDER BY @now;
+        ', array(
+            ':worker_id' => $id
+        ));
+
+        $viewdata['WorkerStatsByDay'] = db_query($pdo, '
+            SELECT CONCAT(MONTH(@now),"-",DAY(@now:=DATE_SUB(@now,INTERVAL 1 DAY))) as day,
+                   (SELECT count(*)
+                      FROM work_data
+                     WHERE DATE(time_requested) = DATE(@now)
+                       AND worker_id = :worker_id) as getworks,
+                   (SELECT count(result)
+                      FROM submitted_work
+                     WHERE DATE(time) = DATE(@now)
+                       AND result = 1
+                       AND worker_id = :worker_id) as shares,
+                   (SELECT count(result)
+                      FROM submitted_work
+                     WHERE DATE(time) = DATE(@now)
+                       AND result = 0
+                       AND worker_id = :worker_id) as rejected,
+                    (SELECT (shares + rejected) * 4294967296 / 86400 / 1000000) as mhash
+
+              FROM submitted_work, (SELECT @now:=now()) t
+
+             WHERE @now > DATE_SUB(now(), INTERVAL 1 MONTH)
+
+             ORDER BY @now;
+        ', array(
+            ':worker_id' => $id
+        ));
+
+        return new AdminWorkerStatsView($viewdata);
+    }
 }
 
 MvcEngine::run(new AdminWorkersController());
