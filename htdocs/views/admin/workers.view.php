@@ -65,27 +65,16 @@ class AdminWorkersView
             <form action="<?php echo_html(make_url('/admin/workers.php')) ?>" method="get">
                 <fieldset>
                     <input type="hidden" name="id" value="<?php echo_html($row['id']) ?>" />
-                    <?php $this->renderImageButton('edit', 'edit-worker', 'Edit worker') ?>
+                    <?php
+                        $this->renderImageButton('edit', 'edit-worker', 'Edit worker');
+                        $this->renderImageButton('stats', 'worker-stats', 'Worker stats');
+                        if ($row['pools'] == 0) {
+                            $this->renderImageButton('delete', 'delete-worker', 'Delete worker');
+                        }
+                    ?>
                 </fieldset>
             </form>
-            <form action="<?php echo_html(make_url('/admin/workers.php')) ?>" method="get">
-                <fieldset>
-                    <input type="hidden" name="id" value="<?php echo_html($row['id']) ?>" />
-                    <?php $this->renderImageButton('stats', 'worker-stats', 'Worker stats') ?>
-                </fieldset>
-            </form>
-        <?php
-            if ($row['pools'] == 0) {
-?>
-            <form action="<?php echo_html(make_url('/admin/workers.php')) ?>" method="post">
-                <fieldset>
-                    <input type="hidden" name="id" value="<?php echo_html($row['id']) ?>" />
-                    <?php $this->renderImageButton('delete', 'delete-worker', 'Delete worker') ?>
-                </fieldset>
-            </form>
-<?php
-            }
-        ?></td>
+        </td>
     </tr>
     <?php } ?>
     <tr>

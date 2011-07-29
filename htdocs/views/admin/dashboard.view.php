@@ -324,6 +324,7 @@ class AdminDashboardView
                 <fieldset>
                     <input type="hidden" name="id" value="<?php echo_html($row['pool_id']) ?>" />
                     <?php $this->renderImageButton('edit', 'edit-pool', 'Edit pool') ?>
+                    <?php $this->renderImageButton('stats', 'pool-stats', 'Pool stats') ?>
                 </fieldset>
             </form>
         </td>

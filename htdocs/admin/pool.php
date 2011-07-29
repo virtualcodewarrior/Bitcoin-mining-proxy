@@ -135,6 +135,78 @@ class AdminPoolController extends AdminController
 
         return new RedirectView('/admin/pool.php');
     }
+
+    public function statsGetView(PoolModel $pool)
+    {
+        if (!$pool->refresh()) {
+            $_SESSION['tempdata']['errors'][] = 'Pool not found.';
+            return new RedirectView('/admin/pool.php');
+        }
+
+        $viewdata = array('pool' => $pool);
+
+        $pdo = db_connect();
+
+        $viewdata['PoolStatsByHour'] = db_query($pdo, '
+            SELECT CONCAT(HOUR(@utc_timestamp:=DATE_SUB(@utc_timestamp,INTERVAL 1 HOUR)),":00") as hour,
+                   (SELECT count(*)
+                      FROM work_data
+                     WHERE HOUR(time_requested) = HOUR(@utc_timestamp)
+                       AND DATE(time_requested) = DATE(@utc_timestamp)
+                       AND pool_id = :pool_id) as getworks,
+                   (SELECT count(result)
+                      FROM submitted_work
+                     WHERE HOUR(time) = HOUR(@utc_timestamp)
+                       AND DATE(time) = DATE(@utc_timestamp)
+                       AND result = 1
+                       AND pool_id = :pool_id) as shares,
+                   (SELECT count(result)
+                      FROM submitted_work
+                     WHERE HOUR(time) = HOUR(@utc_timestamp)
+                       AND DATE(time) = DATE(@utc_timestamp)
+                       AND result = 0
+                       AND pool_id = :pool_id) as rejected,
+                   (SELECT (shares + rejected) * 4294967296 / 3600 / 1000000) as mhash
+
+              FROM submitted_work, (SELECT @utc_timestamp:=UTC_TIMESTAMP()) t
+
+             WHERE @utc_timestamp > DATE_SUB(UTC_TIMESTAMP(), INTERVAL 24 HOUR)
+
+             ORDER BY @utc_timestamp;
+        ', array(
+            ':pool_id' => $pool->id
+        ));
+
+        $viewdata['PoolStatsByDate'] = db_query($pdo, '
+            SELECT DATE(@utc_timestamp:=DATE_SUB(@utc_timestamp,INTERVAL 1 DAY)) as date,
+                   (SELECT count(*)
+                      FROM work_data
+                     WHERE DATE(time_requested) = DATE(@utc_timestamp)
+                       AND pool_id = :pool_id) as getworks,
+                   (SELECT count(result)
+                      FROM submitted_work
+                     WHERE DATE(time) = DATE(@utc_timestamp)
+                       AND result = 1
+                       AND pool_id = :pool_id) as shares,
+                   (SELECT count(result)
+                      FROM submitted_work
+                     WHERE DATE(time) = DATE(@utc_timestamp)
+                       AND result = 0
+                       AND pool_id = :pool_id) as rejected,
+                    (SELECT (shares + rejected) * 4294967296 / 86400 / 1000000) as mhash
+
+              FROM submitted_work, (SELECT @utc_timestamp:=DATE_ADD(UTC_TIMESTAMP(),INTERVAL 1 DAY)) t
+
+             WHERE @utc_timestamp > DATE_SUB(UTC_TIMESTAMP(), INTERVAL 1 MONTH)
+
+             ORDER BY @utc_timestamp;
+        ', array(
+            ':pool_id' => $pool->id
+        ));
+
+        return new AdminPoolStatsView($viewdata);
+    }
+
 }
 
 MvcEngine::run(new AdminPoolController());

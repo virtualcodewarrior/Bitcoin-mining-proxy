@@ -82,6 +82,7 @@ class AdminPoolsView
                     <input type="hidden" name="id" value="<?php echo_html($pool->id) ?>" />
                     <?php
                         $this->renderImageButton('edit', 'edit-pool', 'Edit pool');
+                        $this->renderImageButton('stats', 'pool-stats', 'Pool stats');
                         if (!$pool->worker_count) {
                             $this->renderImageButton('delete', 'delete-pool', 'Delete pool');
                         }
@@ -155,6 +156,194 @@ class AdminEditPoolView
 </table>
 
 </form>
+
+</div>
+
+<?php
+    }
+}
+
+class AdminPoolStatsView
+    extends PoolView
+{
+    protected function getTitle()
+    {
+        $pool = $this->viewdata['pool'];
+        return "Pool Stats - $pool->name";
+    }
+
+    protected function renderBody()
+    {
+        $PoolStatsByHourCount = count($this->viewdata['PoolStatsByHour']);
+        $PoolStatsByDateCount = count($this->viewdata['PoolStatsByDate']);
+?>
+
+<div id="pool-stats">
+
+<script type="text/javascript">
+    google.setOnLoadCallback(drawChartPoolMHashByHour);
+    function drawChartPoolMHashByHour() {
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Hour');
+        data.addColumn('number', 'MHash');
+        data.addRows(<?php echo $PoolStatsByHourCount ?>);
+        <?php
+        $idx = 0;
+        foreach ($this->viewdata['PoolStatsByHour'] as $row) {
+            $hour = date('H:i',strtotime(format_date($row['hour'])));
+            echo "data.setValue({$idx}, 0, '{$hour}'); ";
+            echo "data.setValue({$idx}, 1, {$row['mhash']}); ";
+            echo "\n";
+            $idx++;
+        }
+        ?>
+
+        var chart = new google.visualization.LineChart(document.getElementById('poolmhashbyhourchart_div'));
+        chart.draw(data, {width: 500, height: 200,
+                          colors: ['Orange'],
+                          legend: 'none',
+                          title: 'MHash Average - Last 24 Hours'});
+    }
+
+    google.setOnLoadCallback(drawChartPoolMHashByDate);
+    function drawChartPoolMHashByDate() {
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Date');
+        data.addColumn('number', 'MHash');
+        data.addRows(<?php echo $PoolStatsByDateCount ?>);
+        <?php
+        $idx = 0;
+        foreach ($this->viewdata['PoolStatsByDate'] as $row) {
+            $date = date('m-d',strtotime(format_date($row['date'])));
+            echo "data.setValue({$idx}, 0, '{$date}'); ";
+            echo "data.setValue({$idx}, 1, {$row['mhash']}); ";
+            echo "\n";
+            $idx++;
+        }
+        ?>
+
+        var chart = new google.visualization.LineChart(document.getElementById('poolmhashbydatechart_div'));
+        chart.draw(data, {width: 500, height: 200,
+                          colors: ['Orange'],
+                          legend: 'none',
+                          title: 'MHash Average - Last Month'});
+    }
+
+    google.setOnLoadCallback(drawChartPoolSharesByHour);
+    function drawChartPoolSharesByHour() {
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Hour');
+        data.addColumn('number', 'Valid');
+        data.addColumn('number', 'Rejected');
+        data.addRows(<?php echo $PoolStatsByHourCount ?>);
+        <?php
+        $idx = 0;
+        foreach ($this->viewdata['PoolStatsByHour'] as $row) {
+            $hour = date('H:i',strtotime(format_date($row['hour'])));
+            echo "data.setValue({$idx}, 0, '{$hour}'); ";
+            echo "data.setValue({$idx}, 1, {$row['shares']}); ";
+            echo "data.setValue({$idx}, 2, {$row['rejected']}); ";
+            echo "\n";
+            $idx++;
+        }
+        ?>
+
+        var chart = new google.visualization.LineChart(document.getElementById('poolsharesbyhourchart_div'));
+        chart.draw(data, {width: 500, height: 200,
+                          colors: ['Green', 'Red'],
+                          legend: 'none',
+                          title: 'Shares - Last 24 Hours'});
+    }
+
+    google.setOnLoadCallback(drawChartPoolSharesByDate);
+    function drawChartPoolSharesByDate() {
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Date');
+        data.addColumn('number', 'Valid');
+        data.addColumn('number', 'Rejected');
+        data.addRows(<?php echo $PoolStatsByDateCount ?>);
+        <?php
+        $idx = 0;
+        foreach ($this->viewdata['PoolStatsByDate'] as $row) {
+            $date = date('m-d',strtotime(format_date($row['date'])));
+            echo "data.setValue({$idx}, 0, '{$date}'); ";
+            echo "data.setValue({$idx}, 1, {$row['shares']}); ";
+            echo "data.setValue({$idx}, 2, {$row['rejected']}); ";
+            echo "\n";
+            $idx++;
+        }
+        ?>
+
+        var chart = new google.visualization.LineChart(document.getElementById('poolsharesbydatechart_div'));
+        chart.draw(data, {width: 500, height: 200,
+                          colors: ['Green', 'Red'],
+                          legend: 'none',
+                          title: 'Shares - Last Month'});
+    }
+
+    google.setOnLoadCallback(drawChartPoolGetworksByHour);
+    function drawChartPoolGetworksByHour() {
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Hour');
+        data.addColumn('number', 'Getworks');
+        data.addRows(<?php echo $PoolStatsByHourCount ?>);
+        <?php
+        $idx = 0;
+        foreach ($this->viewdata['PoolStatsByHour'] as $row) {
+            $hour = date('H:i',strtotime(format_date($row['hour'])));
+            echo "data.setValue({$idx}, 0, '{$hour}'); ";
+            echo "data.setValue({$idx}, 1, {$row['getworks']}); ";
+            echo "\n";
+            $idx++;
+        }
+        ?>
+
+        var chart = new google.visualization.LineChart(document.getElementById('poolgetworksbyhourchart_div'));
+        chart.draw(data, {width: 500, height: 200,
+                          colors: ['Blue'],
+                          legend: 'none',
+                          title: 'Getworks - Last 24 Hours'});
+    }
+
+    google.setOnLoadCallback(drawChartPoolGetworksByDate);
+    function drawChartPoolGetworksByDate() {
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Date');
+        data.addColumn('number', 'Getworks');
+        data.addRows(<?php echo $PoolStatsByDateCount ?>);
+        <?php
+        $idx = 0;
+        foreach ($this->viewdata['PoolStatsByDate'] as $row) {
+            $date = date('m-d',strtotime(format_date($row['date'])));
+            echo "data.setValue({$idx}, 0, '{$date}'); ";
+            echo "data.setValue({$idx}, 1, {$row['getworks']}); ";
+            echo "\n";
+            $idx++;
+        }
+        ?>
+
+        var chart = new google.visualization.LineChart(document.getElementById('poolgetworksbydatechart_div'));
+        chart.draw(data, {width: 500, height: 200,
+                          colors: ['Blue'],
+                          legend: 'none',
+                          title: 'Getworks - Last Month'});
+    }
+</script>
+
+<table class="centered">
+    <tr>
+        <td><div id="poolmhashbyhourchart_div"></div></td>
+        <td><div id="poolmhashbydatechart_div"></div></td>
+    </tr>
+    <tr>
+        <td><div id="poolsharesbyhourchart_div"></div></td>
+        <td><div id="poolsharesbydatechart_div"></div></td>
+    </tr>
+    <tr>
+        <td><div id="poolgetworksbyhourchart_div"></div></td>
+        <td><div id="poolgetworksbydatechart_div"></div></td>
+    </tr>
+</table>
 
 </div>
 

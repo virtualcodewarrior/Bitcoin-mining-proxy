@@ -412,3 +412,7 @@ fieldset {
 .image-button-worker-stats {
     background-image: url('icons/chart_pie.png');
 }
+
+.image-button-pool-stats {
+    background-image: url('icons/chart_pie.png');
+}

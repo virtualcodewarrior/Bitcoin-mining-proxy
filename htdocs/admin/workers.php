@@ -273,7 +273,7 @@ class AdminWorkersController extends AdminController
                        AND worker_id = :worker_id) as rejected,
                     (SELECT (shares + rejected) * 4294967296 / 86400 / 1000000) as mhash
 
-              FROM submitted_work, (SELECT @utc_timestamp:=UTC_TIMESTAMP()) t
+              FROM submitted_work, (SELECT @utc_timestamp:=DATE_ADD(UTC_TIMESTAMP(),INTERVAL 1 DAY)) t
 
              WHERE @utc_timestamp > DATE_SUB(UTC_TIMESTAMP(), INTERVAL 1 MONTH)
 
