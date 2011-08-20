@@ -56,7 +56,7 @@ class AdminPoolsView
     <tr <?php if (!$pool->enabled) { ?>class="disabled"<?php } ?>>
         <td><?php echo_html($pool->name) ?></td>
         <td class="enabled-column">
-            <form action="<?php echo_html(make_url('/admin/pool.php')) ?>" method="post">
+            <form action="<?php echo_html(make_url('../admin/pool.php')) ?>" method="post">
                 <fieldset>
                     <input type="hidden" name="id" value="<?php echo_html($pool->id) ?>" />
                     <?php
@@ -71,13 +71,13 @@ class AdminPoolsView
         </td>
         <td><?php echo_html($pool->url) ?></td>
         <td>
-            <form action="<?php echo_html(make_url('/admin/pool-worker.php')) ?>">
+            <form action="<?php echo_html(make_url('../admin/pool-worker.php')) ?>">
                 <fieldset>
                     <input type="hidden" name="id" value="<?php echo_html($pool->id) ?>" />
                     <?php $this->renderImageButton('index', 'manage-workers', 'Manage workers') ?>
                 </fieldset>
             </form>
-            <form action="<?php echo_html(make_url('/admin/pool.php')) ?>" method="get">
+            <form action="<?php echo_html(make_url('../admin/pool.php')) ?>" method="get">
                 <fieldset>
                     <input type="hidden" name="id" value="<?php echo_html($pool->id) ?>" />
                     <?php
@@ -95,7 +95,7 @@ class AdminPoolsView
     <tr>
         <td colspan="3">&nbsp;</td>
         <td>
-            <form action="<?php echo_html(make_url('/admin/pool.php')) ?>">
+            <form action="<?php echo_html(make_url('../admin/pool.php')) ?>">
                 <fieldset>
                     <?php $this->renderImageButton('new', 'new-pool', 'New pool') ?>
                 </fieldset>
@@ -128,7 +128,7 @@ class AdminEditPoolView
 
 <div id="edit-pool">
 
-<form action="<?php echo_html(make_url('/admin/pool.php')) ?>" method="post">
+<form action="<?php echo_html(make_url('../admin/pool.php')) ?>" method="post">
 <fieldset>
     <input type="hidden" name="action" value="edit" />
     <?php if ($pool->id) { ?>

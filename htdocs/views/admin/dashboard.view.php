@@ -174,19 +174,19 @@ class AdminDashboardView
             }
         ?> MHash/s</td>
         <td>
-            <form action="<?php echo_html(make_url('/admin/worker-pool.php')) ?>">
+            <form action="<?php echo_html(make_url('../admin/worker-pool.php')) ?>">
                 <fieldset>
                     <input type="hidden" name="id" value="<?php echo_html($row['worker_id']) ?>" />
                     <?php $this->renderImageButton('index', 'manage-pools', 'Manage pools') ?>
                 </fieldset>
             </form>
-            <form action="<?php echo_html(make_url('/admin/workers.php')) ?>" method="get">
+            <form action="<?php echo_html(make_url('../admin/workers.php')) ?>" method="get">
                 <fieldset>
                     <input type="hidden" name="id" value="<?php echo_html($row['worker_id']) ?>" />
                     <?php $this->renderImageButton('edit', 'edit-worker', 'Edit worker') ?>
                 </fieldset>
             </form>
-            <form action="<?php echo_html(make_url('/admin/workers.php')) ?>" method="get">
+            <form action="<?php echo_html(make_url('../admin/workers.php')) ?>" method="get">
                 <fieldset>
                     <input type="hidden" name="id" value="<?php echo_html($row['worker_id']) ?>" />
                     <?php $this->renderImageButton('stats', 'worker-stats', 'Worker Stats') ?>
@@ -314,13 +314,13 @@ class AdminDashboardView
             echo ")";
         ?></td>
         <td>
-            <form action="<?php echo_html(make_url('/admin/pool-worker.php')) ?>">
+            <form action="<?php echo_html(make_url('../admin/pool-worker.php')) ?>">
                 <fieldset>
                     <input type="hidden" name="id" value="<?php echo_html($row['pool_id']) ?>" />
                     <?php $this->renderImageButton('index', 'manage-workers', 'Manage workers') ?>
                 </fieldset>
             </form>
-            <form action="<?php echo_html(make_url('/admin/pool.php')) ?>">
+            <form action="<?php echo_html(make_url('../admin/pool.php')) ?>">
                 <fieldset>
                     <input type="hidden" name="id" value="<?php echo_html($row['pool_id']) ?>" />
                     <?php $this->renderImageButton('edit', 'edit-pool', 'Edit pool') ?>

@@ -48,7 +48,7 @@ class AdminPoolWorkerView
     <?php foreach ($this->viewdata['pool-workers'] as $row) { ?>
     <tr class="<?php if (isset($row['username']) && (!$row['enabled'])) { echo 'disabled'; } ?>">
         <td>
-            <form action="<?php echo_html(make_url('/admin/pool-worker.php')) ?>" method="get">
+            <form action="<?php echo_html(make_url('../admin/pool-worker.php')) ?>" method="get">
                 <fieldset>
                     <input type="hidden" name="worker_id" value="<?php echo_html($row['worker-id']) ?>" />
                     <input type="hidden" name="pool_id" value="<?php echo_html($this->viewdata['pool-id']) ?>" />
@@ -72,7 +72,7 @@ class AdminPoolWorkerView
             <?php
                 $newstatus = $row['enabled'] ? 0 : 1;
             ?>
-            <form action="<?php echo_html(make_url('/admin/pool-worker.php')) ?>" method="post">
+            <form action="<?php echo_html(make_url('../admin/pool-worker.php')) ?>" method="post">
                 <fieldset>
                     <input type="hidden" name="worker_id" value="<?php echo_html($row['worker-id']) ?>" />
                     <input type="hidden" name="pool_id" value="<?php echo_html($this->viewdata['pool-id']) ?>" />
@@ -93,7 +93,7 @@ class AdminPoolWorkerView
     </tr>
     <?php } ?>
     <tr>
-        <form action="<?php echo_html(make_url('/admin/pool-worker.php')) ?>" method="post">
+        <form action="<?php echo_html(make_url('../admin/pool-worker.php')) ?>" method="post">
             <fieldset>
                 <input type="hidden" name="pool_id" value="<?php echo_html($this->viewdata['pool-id']) ?>" />
                 <td><?php $this->renderButton('setGlobalValues', 'Update Globally'); ?></td>
@@ -130,7 +130,7 @@ class PoolWorkerEditView
 
 <div id="edit-pool-worker">
 
-<form action="<?php echo_html(make_url('/admin/pool-worker.php')) ?>" method="post">
+<form action="<?php echo_html(make_url('../admin/pool-worker.php')) ?>" method="post">
 <fieldset>
 <input type="hidden" name="action" value="edit" />
 <input type="hidden" name="worker_id" value="<?php echo_html($model->worker_id) ?>" />

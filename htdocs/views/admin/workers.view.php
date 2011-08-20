@@ -56,13 +56,13 @@ class AdminWorkersView
         <td><?php echo_html($row['name'])     ?></td>
         <td><?php echo_html($row['password']) ?></td>
         <td>
-            <form action="<?php echo_html(make_url('/admin/worker-pool.php')) ?>">
+            <form action="<?php echo_html(make_url('../admin/worker-pool.php')) ?>">
                 <fieldset>
                     <input type="hidden" name="id" value="<?php echo_html($row['id']) ?>" />
                     <?php $this->renderImageButton('index', 'manage-pools', 'Manage pools') ?>
                 </fieldset>
             </form>
-            <form action="<?php echo_html(make_url('/admin/workers.php')) ?>" method="get">
+            <form action="<?php echo_html(make_url('../admin/workers.php')) ?>" method="get">
                 <fieldset>
                     <input type="hidden" name="id" value="<?php echo_html($row['id']) ?>" />
                     <?php
@@ -80,7 +80,7 @@ class AdminWorkersView
     <tr>
         <td colspan="2">&nbsp;</td>
         <td>
-            <form action="<?php echo_html(make_url('/admin/workers.php')) ?>">
+            <form action="<?php echo_html(make_url('../admin/workers.php')) ?>">
                 <fieldset>
                     <?php $this->renderImageButton('new', 'new-worker', 'New worker') ?>
                 </fieldset>
@@ -125,7 +125,7 @@ class AdminWorkerNewEditView
 
 <div id="<?php echo $this->getDivId() ?>">
 
-<form action="<?php echo_html(make_url('/admin/workers.php')) ?>" method="post">
+<form action="<?php echo_html(make_url('../admin/workers.php')) ?>" method="post">
 
 <fieldset>
 <input type="hidden" name="action" value="<?php echo $this->getAction() ?>" />

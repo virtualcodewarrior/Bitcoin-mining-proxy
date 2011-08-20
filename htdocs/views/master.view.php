@@ -26,10 +26,10 @@ abstract class MasterView
     implements IHtmlView
 {
     private static $menuitems = array(
-        array('dashboard', 'Dashboard', '/admin/'),
-        array('pools',     'Pools',     '/admin/pool.php'),
-        array('workers',   'Workers',   '/admin/workers.php'),
-        array('about',     'About',     '/admin/about.php')
+        array('dashboard', 'Dashboard', '../admin/'),
+        array('pools',     'Pools',     '../admin/pool.php'),
+        array('workers',   'Workers',   '../admin/workers.php'),
+        array('about',     'About',     '../admin/about.php')
     );
 
     protected function getMenuId()
@@ -123,7 +123,7 @@ abstract class MasterView
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
         <title><?php echo_html($title) ?></title>
-        <link rel="stylesheet" type="text/css" href="<?php echo_html(make_url('/assets/style.css')) ?>" />
+        <link rel="stylesheet" type="text/css" href="<?php echo_html(make_url('../assets/style.css')) ?>" />
         <script type="text/javascript" src="http://www.google.com/jsapi"></script>
         <script type="text/javascript">
             google.load('visualization', '1', {packages: ['corechart']});

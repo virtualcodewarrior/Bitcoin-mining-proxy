@@ -49,7 +49,7 @@ class AdminWorkerPoolView
     <?php foreach ($this->viewdata['worker-pools'] as $row) { ?>
     <tr class="<?php if (isset($row['username']) && (!$row['enabled'] || !$row['pool-enabled'])) { echo 'disabled'; } ?>">
         <td>
-            <form action="<?php echo_html(make_url('/admin/worker-pool.php')) ?>" method="get">
+            <form action="<?php echo_html(make_url('../admin/worker-pool.php')) ?>" method="get">
                 <fieldset>
                     <input type="hidden" name="worker_id" value="<?php echo_html($this->viewdata['worker-id']) ?>" />
                     <input type="hidden" name="pool_id" value="<?php echo_html($row['pool-id']) ?>" />
@@ -73,7 +73,7 @@ class AdminWorkerPoolView
             <?php
                 $newstatus = $row['enabled'] ? 0 : 1;
             ?>
-            <form action="<?php echo_html(make_url('/admin/worker-pool.php')) ?>" method="post">
+            <form action="<?php echo_html(make_url('../admin/worker-pool.php')) ?>" method="post">
                 <fieldset>
                     <input type="hidden" name="id" value="<?php echo_html($this->viewdata['worker-id']) ?>" />
                     <input type="hidden" name="pool-id" value="<?php echo_html($row['pool-id']) ?>" />
@@ -92,7 +92,7 @@ class AdminWorkerPoolView
             <?php
                 $indicator = $row['pool-enabled'] ? 'flag_green.png' : 'flag_red.png';
             ?>
-            <img alt="<?php echo_html($row['pool-enabled'] ? 'Yes' : 'No') ?>" src="<?php echo_html(make_url("/assets/icons/$indicator")) ?>" />
+            <img alt="<?php echo_html($row['pool-enabled'] ? 'Yes' : 'No') ?>" src="<?php echo_html(make_url("../assets/icons/$indicator")) ?>" />
         </td>
         <td><?php echo_html($row['username']) ?></td>
         <td><?php echo_html($row['password']) ?></td>
@@ -125,7 +125,7 @@ class WorkerPoolEditView
 
 <div id="edit-worker-pool">
 
-<form action="<?php echo_html(make_url('/admin/worker-pool.php')) ?>" method="post">
+<form action="<?php echo_html(make_url('../admin/worker-pool.php')) ?>" method="post">
 <fieldset>
 <input type="hidden" name="action" value="edit" />
 <input type="hidden" name="worker_id" value="<?php echo_html($model->worker_id) ?>" />
