@@ -60,8 +60,10 @@ class AdminDashboardView
     {
         global $BTC_PROXY;
         global $BALANCE_JSON;
+	$timestring = "Last updated on : " .  date("l, jS \o\\f F Y \a\\t H:i:s");
+	
 ?>
-
+<div style="text-align: center; font-weight: bold;"><?php echo $timestring; ?></div>
 <div id="dashboard">
 
 <?php if ($this->viewdata['url-fopen-disabled']) { ?>
