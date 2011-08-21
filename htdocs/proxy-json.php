@@ -19,6 +19,7 @@ if ($url) {
     $ch = curl_init();
     curl_setopt_array($ch, array(CURLOPT_URL => $url,
                                   CURLOPT_HEADER => 0,
+				  CURLOPT_USERAGENT => $_SERVER["HTTP_USER_AGENT"],
                                   CURLOPT_RETURNTRANSFER => 1,
                                   CURLOPT_FOLLOWLOCATION => 1,
                                   CURLOPT_SSL_VERIFYPEER => 0,

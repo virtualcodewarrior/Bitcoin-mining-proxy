@@ -75,6 +75,10 @@ $BALANCE_JSON = array(
                 'unconfirmed' => 'unconfirmed',
                 'email' => 'user@mail.com',
                 'password' => 'password'),
+        'swepool' => array(
+                 'url' => 'http://swepool.net/json.php?key=123',
+                 'confirmed' => 'balance',
+                 'unconfirmed' => ''),
         'eligius' => array(
                 'url' => 'http://localhost/balance/getEligius.php',
                 'confirmed' => 'balance',

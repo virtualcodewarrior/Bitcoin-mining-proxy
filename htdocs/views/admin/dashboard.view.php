@@ -496,23 +496,59 @@ function createGraphNotifier() {
 }
 var notifyGraph = createGraphNotifier();
 
-function getBalance(id, balance) {
-   $.ajaxSetup({timeout: 15000});
-   $.getJSON('../proxy-json.php?pool='+id, function(data) {
-      // confirmed
-      var evalstr = "var t = data." + pools[id]['confirmed'];
-      eval(evalstr);
-      balance[id] = t;
-      // unconfirmed
-      if (pools[id]['unconfirmed']) {
-         t = 0;
-         evalstr = "t = data." + pools[id]['unconfirmed'];
-         eval(evalstr);
-         unconfirmed[id] = t;
-      }
-      console.log(id+ ": " + balance[id] + " / " + unconfirmed[id]);
-      notifyGraph();
-   });
+function getBalance(id, balance) 
+{
+	$.ajaxSetup({timeout: 15000});
+	try
+	{
+	        $.getJSON('../proxy-json.php?pool='+id, function(data)
+		{
+			if (data != null)
+			{
+				// confirmed
+				var ArrayIndexFound = pools[id]['confirmed'].match(/\[.*\]/i) != null; 
+
+				var evalstr = (!ArrayIndexFound) ? "var t = data." + pools[id]['confirmed'] : "var t = data" + pools[id]['confirmed'];
+				try
+				{
+					eval(evalstr);
+				}
+				catch (err)
+				{
+					// error retrieving the data
+					t = 0;
+				}
+		      		balance[id] = t;
+				// unconfirmed
+	      			if (pools[id]['unconfirmed']) 
+				{
+        				t = 0;
+	        		 	evalstr = "t = data." + pools[id]['unconfirmed'];
+					try
+					{
+		         			eval(evalstr);
+					}
+					catch (err)
+					{
+						// an error occured
+						t = 0;
+					}
+        	 			unconfirmed[id] = t;
+	      			}
+			}
+			else
+			{
+				balance[id] = 0;
+				unconfirmed[id] = 0;
+			}
+			console.log(id + ": " + balance[id] + " / " + unconfirmed[id]);
+	      		notifyGraph();
+		});
+	}
+	catch (err)
+	{
+		// something wrong
+	}
 }
 
 function getBalances(balance) {   
